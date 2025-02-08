@@ -42,9 +42,13 @@ test-lincagem:
 		-o bin/ut_lincagem src/lincagem.cpp $(TESTADOR)
 
 release: 
-	echo "ainda vendo como o programa será feito ..."
+	@mkdir -p build/
+	g++ $(HEADERS) -c -o build/extracao_comando.o src/extracao_comando.cpp
+	g++ $(HEADERS) -c -o build/lincagem.o src/lincagem.cpp
+	@echo "Objetos de 'lincagem' e 'extracao_comandos' compilados."
 	g++ $(HEADERS) -Wall -std=c++17 -Wno-unused-function \
-		-o bin/cmd_frequencia src/main.cpp src/lincagem.cpp src/extracao_comando.cpp
+		-o bin/cmd_frequencia src/main.cpp build/*.o
+	@echo "Lincagem realizada com sucesso(cmd_frequencia)."
 	
 
 
