@@ -195,26 +195,19 @@ static vector<frequencia_t> todas_disponiveis(GrupoFrequencias& m) {
 #include "unitarios.cpp"
 
 #else
+/* Projeto principal, este que recebe os argumentos e opera o software de 
+ * acordo com o que foi demandado. */
 #include <optional>
 #include <unistd.h>
 #include <cassert>
 #include "lincagem.hpp"
 #define SEM_MAIS_ARGUMENTOS -1
 
-
-int main(int qtd, char* argumentos[], char* variaveis[]) 
-{
-   lincagem::tenta_criar_linque_ao_iniciar_programa();
-
-   // processando todos comandos e contando sua frequência...
-   ifstream arquivo(CAMINHO, ios::in);
-   auto frequencias = computa_frequencia(arquivo); 
-   arquivo.close();
-
-   // amostra de como será a visualização ...
-   vector<frequencia_t> exemplos;
+void gerencia_opcoes_impostas(
+  int qtd, char** argumentos, bool& havera_visualizacao, 
+  vector<frequencia_t>& exemplos, GrupoFrequencias& frequencias
+){
    int opcao = getopt(qtd, argumentos, "Mht");
-   bool havera_visualizacao = false;
 
    if (opcao != SEM_MAIS_ARGUMENTOS) {
       switch (opcao) {
@@ -244,12 +237,28 @@ int main(int qtd, char* argumentos[], char* variaveis[])
       }
    } else 
       puts("nenhuma opção foi selecionada.");
+}
+
+int main(int qtd, char* argumentos[], char* variaveis[]) 
+{
+   lincagem::tenta_criar_linque_ao_iniciar_programa();
+
+   // processando todos comandos e contando sua frequência...
+   ifstream arquivo(CAMINHO, ios::in);
+   auto frequencias = computa_frequencia(arquivo); 
+   arquivo.close();
+
+   // amostra de como será a visualização ...
+   vector<frequencia_t> exemplos;
+   bool havera_visualizacao = false;
+
+   gerencia_opcoes_impostas
+     (qtd, argumentos, havera_visualizacao, exemplos, frequencias);
 
    if (havera_visualizacao) {
       cout << endl; 
       visualizacao(exemplos);
       cout << endl;
    }
-
 }
 #endif

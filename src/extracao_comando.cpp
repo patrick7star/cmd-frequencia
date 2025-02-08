@@ -75,7 +75,7 @@ string retira_caminho (string cmd) {
    return cmd;
 }
 
-#ifdef _EXTRACAO_CMD
+#ifdef __unit_tests__
 void visualiza_deque (deque<string> fila) {
 	size_t total = fila.size();
 	size_t contagem = 1;
